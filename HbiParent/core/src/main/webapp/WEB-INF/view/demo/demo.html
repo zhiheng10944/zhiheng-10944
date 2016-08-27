@@ -1,0 +1,254 @@
+<#--
+ * description: DEMO
+ * version: 1.0
+ * #copyright#
+ *
+-->
+<#include "../include/head.html">
+<script src="${base.contextPath}/common/code?typeStatue=HAP_OM_ORDER_STATUS" type="text/javascript"></script>
+<body style="padding: 10px;">
+<form id="demoForm"></form>
+<div id="demoGrid" style="margin: 0; padding: 0"></div>
+<script type="text/javascript">
+    $(function () {
+        window['demoForm'] = $("#demoForm").ligerForm({
+            fields : [{
+                display : "<@spring.message "hbi.core.demo.companyName"/>",
+                name : "companyId",//最终选中的值字段名
+                type : "popup",
+                newline : false,
+                //如果不需要把lov选中的textField值放进data中那么这个属性可以不设置，如果需要放在data中就需要设置
+                textField:'companyName',
+                options:{
+                    readonly:false,//是否可编辑
+                    valueField : 'companyId',//选中的valueField
+                    textField : 'companyName',//选中的textField
+                    grid : {
+                        columns : [ {
+                            display : 'companyId',
+                            name : "companyId",
+                            width : 150,
+                            type : "int",
+                            align : "left"
+                        }, {
+                            display : 'companyName',
+                            name : "companyName",
+                            width : 150,
+                            type : "text",
+                            align : "left"
+                        }],
+                        //数据查询的url
+                        url : '${base.contextPath}/company/query' 
+                    },
+                    //lov上的查询条件
+                    condition : {
+                        inputWidth : 150,
+                        labelWidth : 70,
+                        fields : [ {
+                            display : 'companyNumber',
+                            name : "companyNumber",
+                            newline : true,
+                            type : "text"
+                        }, {
+                            display : 'companyName',
+                            name : "companyName",
+                            newline : false,
+                            type : "text"
+                        } ]
+                    }
+                }
+
+            },{
+                display : "<@spring.message "hbi.core.demo.customerName"/>",
+                name : "customerId",//最终选中的值字段名
+                type : "popup",
+                newline : false,
+                //如果不需要把lov选中的textField值放进data中那么这个属性可以不设置，如果需要放在data中就需要设置
+                textField:'customerName',
+                options:{
+                    readonly:false,//是否可编辑
+                    valueField : 'customerId',//选中的valueField
+                    textField : 'customerName',//选中的textField
+                    grid : {
+                        columns : [ {
+                            display : 'customerNumber',
+                            name : "customerNumber",
+                            width : 150,
+                            type : "int",
+                            align : "left"
+                        }, {
+                            display : 'customerName',
+                            name : "customerName",
+                            width : 150,
+                            type : "text",
+                            align : "left"
+                        }],
+                        //数据查询的url
+                        url : '${base.contextPath}/customer/query',
+                        	onLoadData: function(){
+                                if($.ligerui.get('companyId').getValue()!=null){
+                                      this.setParm('companyId', $.ligerui.get('companyId').getValue())
+                              	}
+                            }
+                    },
+                    //lov上的查询条件
+                    condition : {
+                        inputWidth : 150,
+                        labelWidth : 70,
+                        fields : [ {
+                            display : 'customerId',
+                            name : "customerId",
+                            newline : true,
+                            type : "text"
+                        }, {
+                            display : 'customerName',
+                            name : "customerName",
+                            newline : false,
+                            type : "text"
+                        } ]
+                    }
+                }
+
+            },{
+                type : 'text',
+                label: '<@spring.message "hbi.core.demo.headerId"/>',
+                name : 'headerId'
+               
+            },{
+                display : "<@spring.message "hbi.core.demo.itemDescription"/>",
+                name : "inventoryItemId",//最终选中的值字段名
+                type : "popup",
+                newline : false,
+                //如果不需要把lov选中的textField值放进data中那么这个属性可以不设置，如果需要放在data中就需要设置
+                textField:'itemDescription',
+                options:{
+                    readonly:false,//是否可编辑
+                    valueField : 'inventoryItemId',//选中的valueField
+                    textField : 'itemDescription',//选中的textField
+                    grid : {
+                        columns : [ {
+                            display : 'inventoryItemId',
+                            name : "inventoryItemId",
+                            width : 150,
+                            type : "int",
+                            align : "left"
+                        }, {
+                            display : 'itemDescription',
+                            name : "itemDescription",
+                            width : 150,
+                            type : "text",
+                            align : "left"
+                        }],
+                        //数据查询的url
+                        url : '${base.contextPath}/inventoryItem/query' 
+                    },
+                    //lov上的查询条件
+                    condition : {
+                        inputWidth : 150,
+                        labelWidth : 70,
+                        fields : [ {
+                            display : 'inventoryItemId',
+                            name : "inventoryItemId",
+                            newline : true,
+                            type : "text"
+                        }, {
+                            display : 'itemDescription',
+                            name : "itemDescription",
+                            newline : false,
+                            type : "text"
+                        } ]
+                    }
+                }
+
+            },{
+            	display: "<@spring.message "hbi.core.demo.orderStatus"/>",
+            	name: "orderStatus",
+            	type: "select",
+            	textField:"orderStatus",
+            	newline:false,
+            	options: {
+               	 readonly: false,
+                	valueField: 'value',
+	                textField: 'meaning',
+	                data : typeStatue           
+            	}
+            }],
+            buttons: [{
+                text    : '<@spring.message "hap.query"/>',
+                disabled: false,
+                width   : 60,
+                click   : function () {
+                    Hap.gridQuery({
+                        form: demoForm,
+                        grid: demoGrid
+                    })
+                }
+            },{
+                text : '<@spring.message "hap.reset"/>',
+                disabled : false,
+                width : 60,
+                click : function() {
+                	demoForm.reset();
+                }
+
+           }]
+        });
+
+        window['demoGrid'] = $("#demoGrid").ligerGrid({
+            unSetValidateAttr: false,
+            columns          : [{
+                display : '销售订单号',
+                name : 'headerId',
+                align : 'left',
+                width : 120
+            },{
+                display : '公司名称',
+                name : 'companyName',
+                align : 'left',
+                width : 120,
+            },{
+                display : '客户名称',
+                name : 'customerName',
+                align : 'left',
+                width : 120,
+            }, {
+                display : '订单日期',
+                name : 'orderDate',
+                align : 'left',
+                width : 150,
+            },{
+                display : '订单状态',
+                name : 'orderStatus',
+                align : 'left',
+                width : 150,
+            },{
+                display : '订单金额',
+                name : 'price',
+                align : 'left',
+                width : 150,
+            }],
+            url              : '${base.contextPath}/line/query',
+            toolbar          : {
+                items: [{
+                    text   : '<@spring.message "hap.new"/>',
+                    disable: false,
+                    click  : function () {
+                    	$.ligerDialog.open({
+                    		url:'${base.contextPath}/demo/new.html',
+                    		height:610,
+                    		width:1000,
+                    		isResize:true
+                    	});
+                    },
+                    icon   : 'add'
+                }]
+            },
+            enabledEdit      : true,
+            width            : '99%',
+            height           : '98%',
+            checkbox         : false
+        });
+    });
+</script>
+</body>
+</html>

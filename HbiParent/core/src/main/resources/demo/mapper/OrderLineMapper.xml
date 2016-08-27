@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hbi.core.demo.mapper.OrderLineMapper">
+  <resultMap id="BaseResultMap" type="hbi.core.demo.dto.OrderLine" extends="com.hand.hap.mapper.StdMapper.STD">
+    <result column="LINE_ID" property="lineId" jdbcType="BIGINT"/>
+    <result column="HEADER_ID" jdbcType="BIGINT" property="headerId" />
+    <result column="LINE_NUMBER" jdbcType="BIGINT" property="lineNumber" />
+    <result column="INVENTORY_ITEM_ID" jdbcType="BIGINT" property="inventoryItemId" />
+    <result column="ORDERD_QUANTITY" jdbcType="BIGINT" property="orderdQuantity" />
+    <result column="ORDER_QUANTITY_UOM" jdbcType="VARCHAR" property="orderQuantityUom" />
+    <result column="UNIT_SELLING_PRICE" jdbcType="BIGINT" property="unitSellingPrice" />
+    <result column="DESCRIPTION" jdbcType="VARCHAR" property="description" />
+    <result column="COMPANY_ID" jdbcType="BIGINT" property="companyId" />
+    <result column="ADDITION1" jdbcType="VARCHAR" property="addition1" />
+    <result column="ADDITION2" jdbcType="VARCHAR" property="addition2" />
+    <result column="ADDITION3" jdbcType="VARCHAR" property="addition3" />
+    <result column="ADDITION4" jdbcType="VARCHAR" property="addition4" />
+    <result column="ADDITION5" jdbcType="VARCHAR" property="addition5" />
+  </resultMap>
+  
+  <select id="selectByCondition" parameterType="hbi.core.demo.dto.OrderLine" resultType="hbi.core.demo.dto.OrderLine">
+    select head.HEADER_ID headerId,
+        com.COMPANY_NAME companyName,
+        cus.CUSTOMER_NAME customerName,
+        head.ORDER_DATE orderDate,
+        head.ORDER_STATUS orderStatus,
+        line.UNIT_SELLING_PRICE*line.ORDERD_QUANTITY price
+        from hap_om_order_headers head, hap_om_order_lines line, hap_ar_customers cus, hap_org_companys com, hap_inv_inventory_items item
+        where head.COMPANY_ID = com.COMPANY_ID and head.CUSTOMER_ID = cus.CUSTOMER_ID 
+        and line.HEADER_ID = head.HEADER_ID and line.INVENTORY_ITEM_ID = item.INVENTORY_ITEM_ID
+        <if test="companyId!=null">
+                AND com.company_id = #{companyId}
+            </if>
+            <if test="customerId!=null">
+                AND cus.customer_id = #{customerId}
+            </if>
+            <if test="headerId!=null">
+                AND head.header_id = #{headerId}
+            </if>
+            <if test="inventoryItemId!=null">
+                AND item.inventory_item_id = #{inventoryItemId}
+            </if>
+            <if test="orderStatus!=null">
+                AND head.order_status = #{orderStatus}
+            </if>         
+  </select>
+  
+   <select id="selectLine" parameterType="hbi.core.demo.dto.OrderLine" resultType="hbi.core.demo.dto.OrderLine">
+    select line.HEADER_ID headerId,
+        line.LINE_ID lineId,
+        line.HEADER_ID headerId,
+        line.LINE_NUMBER lineNumber,
+        line.INVENTORY_ITEM_ID inventoryItemId,
+        line.ORDERD_QUANTITY orderdQuantity,
+        line.ORDER_QUANTITY_UOM orderQuantityUom,
+        line.UNIT_SELLING_PRICE unitSelling,
+        line.DESCRIPTION description,
+        line.COMPANY_ID companyId,
+        line.ADDITION1 addition1,
+        line.ADDITION2 addition2,
+        line.ADDITION3 addition3,
+        line.ADDITION4 addition4,
+        line.ADDITION5 addition5
+		from hap_om_order_lines line
+  </select> 
+  
+  <select id="countLine" parameterType="hbi.core.demo.dto.OrderLine" resultType="java.lang.Long">
+  	   select count(*) from hap_om_order_lines line
+  </select> 
+
+ 	<insert id="insertLine" parameterType="hbi.core.demo.dto.OrderLine"  useGeneratedKeys="true" keyProperty="lineId">
+		insert into hap_om_order_lines set 
+		LINE_ID=#{lineId},
+		HEADER_ID=#{headerId},
+		LINE_NUMBER=#{lineNumber},
+		INVENTORY_ITEM_ID=#{inventoryItemId},
+		ORDERD_QUANTITY=#{orderdQuantity},
+		ORDER_QUANTITY_UOM=#{orderQuantityUom},
+		UNIT_SELLING_PRICE=#{unitSellingPrice},
+		DESCRIPTION=#{decription},
+		COMPANY_ID=#{companyId}
+	</insert>
+
+</mapper>

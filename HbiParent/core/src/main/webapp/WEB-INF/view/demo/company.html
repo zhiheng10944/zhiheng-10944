@@ -1,0 +1,269 @@
+<#--
+ * description: Fruit.html
+ * version: 1.0 
+ * author:taotao.xu@hand-china.com
+ * #{copyright}#
+ * 
+-->
+<#include "../include/head.html">
+<body style="padding: 10px;">
+	<form id="fruitForm"></form>
+    <div id="fruitGrid" style="margin: 0; padding: 0"></div>
+    <script type="text/javascript">
+    $(function() {
+    	//debugger;
+        window['fruitForm'] = $("#fruitForm").ligerForm({
+            fields : [ {
+                display: "公司名称",
+                name: "companyName",
+                type: "popup",
+                textField: 'companyName',
+                options:{
+                     // 其他popup配置
+                  readonly:false,//是否可编辑
+                    valueField : 'companyId',//选中的valueField
+                    textField : 'companyName',//选中的textField
+                    grid : {
+                           columns : [ {
+                                        display : '公司代码',
+                                        name : "companyId",
+                                        width : 120,
+                                        type : "int"
+                                    }, {
+                                        display : '公司全称',
+                                        name : "companyName",
+                                        width : 120,
+                                        type : "text"
+                                    }],
+                                    url : '${base.contextPath}/company/query'
+                    },
+                  //lov上的查询条件
+                    condition : {
+                        inputWidth : 150,
+                        labelWidth : 70,
+                        fields : [ {
+                            display : '公司代码',
+                            name : "companyId",
+                            newline : true,
+                            type : "text"
+                        }, {
+                            display : '公司全称',
+                            name : "companyName",
+                            newline : false,
+                            type : "text"
+                        } ]
+                    },
+                }
+            },{
+                display: "客户名称",
+                name: "customerName",
+                type: "popup",
+                textField: 'customerName',
+                options:{
+                     // 其他popup配置
+                  readonly:false,//是否可编辑
+                    valueField : 'customerId',//选中的valueField
+                    textField : 'customerName',//选中的textField
+                    grid : {
+                           columns : [ {
+                                        display : '客户ID',
+                                        name : "customerId",
+                                        width : 120,
+                                        type : "int"
+                                    }, {
+                                        display : '客户名称',
+                                        name : "customerName",
+                                        width : 120,
+                                        type : "text"
+                                    }],
+                                    url : '${base.contextPath}/customer/query'
+                    },
+                  //lov上的查询条件
+                    condition : {
+                        inputWidth : 150,
+                        labelWidth : 70,
+                        fields : [ {
+                            display : '客户ID',
+                            name : "customerId",
+                            newline : true,
+                            type : "text"
+                        }, {
+                            display : '客户名称',
+                            name : "customerName",
+                            newline : false,
+                            type : "text"
+                        } ]
+                    },
+                }
+            },{
+                type : 'text',
+                label : '销售订单号',
+                name : 'lineId',
+                width: 120
+            },{
+                display: "物料",
+                name: "itemDescription",
+                type: "popup",
+                textField: 'itemDescription',
+                options:{
+                     // 其他popup配置
+                  readonly:false,//是否可编辑
+                    valueField : 'inventoryItemId',//选中的valueField
+                    textField : 'itemDescription',//选中的textField
+                    grid : {
+                           columns : [ {
+                                        display : '物料ID',
+                                        name : "inventoryItemId",
+                                        width : 120,
+                                        type : "int"
+                                    }, {
+                                        display : '物料描述',
+                                        name : "itemDescription",
+                                        width : 120,
+                                        type : "text"
+                                    }],
+                                    url : '${base.contextPath}/item/query'
+                    },//lov上的查询条件
+                    condition : {
+                        inputWidth : 150,
+                        labelWidth : 70,
+                        fields : [ {
+                            display : '物料ID',
+                            name : "inventoryItemId",
+                            newline : true,
+                            type : "text"
+                        }, {
+                            display : '物料描述',
+                            name : "itemDescription",
+                            newline : false,
+                            type : "text"
+                        } ]
+                    },
+                    
+                }
+            },{
+                display: "订单状态",
+                name: "description",
+                type: "select",
+                textField:"description",
+                options: {
+                    readonly: false,
+                    valueField: 'lineId',
+                    textField: 'description',
+                    url: '${base.contextPath}/line/query',
+                }
+            }],
+            buttons : [ {
+                text : '查询',
+                disabled : false,
+                width : 60,
+                click : function() {
+                	 Hap.gridQuery({
+                         form : fruitForm,
+                         grid : fruitGrid
+                	 })
+                }
+            },{
+                text : '重置',
+                disabled : false,
+                width : 60,
+                click : function() {
+                	
+               	 })
+                }
+            },{
+                text : '导出Excel',
+                disabled : false,
+                width : 60,
+                click : function() {
+                	
+                }
+            }],
+        
+        });
+       
+        
+
+    window['fruitGrid'] = $("#fruitGrid").ligerGrid({
+        unSetValidateAttr : false,
+        columns : [ {
+            display : '销售订单号',
+            name : 'lineId',
+            align : 'left',
+            width : 120
+        },{
+            display : '公司名称',
+            name : 'companyName',
+            align : 'left',
+            width : 120,
+        },{
+            display : '客户名称',
+            name : 'customerName',
+            align : 'left',
+            width : 120,
+        }, {
+            display : '订单日期',
+            name : 'date',
+            align : 'left',
+            width : 150,
+        },{
+            display : '订单状态',
+            name : 'description',
+            align : 'left',
+            width : 150,
+        }，{
+            display : '订单金额',
+            name : 'price',
+            align : 'left',
+            width : 150,
+        }],
+        url : '${base.contextPath}/all/query',
+        toolbar : {
+            items : [ {
+                text : '<@spring.message "hap.new"/>',
+                disable : false,
+                click : function() {
+                    fruitGrid.addRow({})
+                },
+                icon : 'add'
+            }, {
+                line : true
+            }, {
+                text : '<@spring.message "hap.delete"/>',
+                click : function() {
+                     Hap.gridDelete({
+                        grid : fruitGrid,
+                        url : '${base.contextPath}/sys/student/delete'
+                    }) 
+                	fruitGrid.deleteSelectedRow();
+                },
+                icon : 'delete'
+            }, {
+                line : true
+            }, {
+                text : '<@spring.message "hap.save"/>',
+                click : function() {
+                    Hap.gridSave({
+                        grid : fruitGrid,
+                        url : '${base.contextPath}/ass/fruit/submit'
+                    })
+                },
+                icon : 'save'
+            }]
+        },
+        enabledEdit : true,
+        width : '99%',
+        height : '98%',
+        checkbox : true
+   	 });
+    });
+    
+    </script>
+</body>
+</html>
+
+
+
+										
+								     
+

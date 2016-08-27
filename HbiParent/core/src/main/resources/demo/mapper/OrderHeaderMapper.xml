@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hbi.core.demo.mapper.OrderHeaderMapper">
+  <resultMap id="BaseResultMap" type="hbi.core.demo.dto.OrderHeader" extends="com.hand.hap.mapper.StdMapper.STD">
+    <result column="HEADER_ID" property="headerId" jdbcType="BIGINT"/>
+    <result column="ORDER_NUMBER" jdbcType="VARCHAR" property="orderNumber" />
+    <result column="COMPANY_ID" jdbcType="BIGINT" property="companyId" />
+    <result column="ORDER_DATE" jdbcType="TIMESTAMP" property="orderDate" />
+    <result column="ORDER_STATUS" jdbcType="VARCHAR" property="orderStatus" />
+    <result column="CUSTOMER_ID" jdbcType="BIGINT" property="customerId" />
+ 
+ 
+  </resultMap>
+  
+  
+  
+</mapper>

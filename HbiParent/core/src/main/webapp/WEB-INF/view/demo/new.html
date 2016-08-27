@@ -1,0 +1,520 @@
+<#--
+ * description: DEMO
+ * version: 1.0
+ * #copyright#
+ *
+-->
+<#include "../include/head.html">
+<script src="${base.contextPath}/common/code?typeStatue=HAP_OM_ORDER_STATUS" type="text/javascript"></script>
+<body style="padding: 10px;">
+<form id="demoForm" ></form>
+<div id="job_cron_tabs" class="liger-tab">
+    <div tabid="job_cron_addtab" title="主要" lselected="true">
+        <div id="demoGrid" style="margin: 0; padding: 0"></div>
+    </div>
+    <div tabid="job_cron_addtab2" title="其他" lselected="true">
+        <div id="demoGrid2" style="margin: 0; padding: 0"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        window['demoForm'] = $("#demoForm").ligerForm({
+            fields : [{
+                type : 'text',
+                label: '<@spring.message "hbi.core.demo.orderNumber"/>',
+                name : 'orderNumber'
+            },{
+                display : "<@spring.message "hbi.core.demo.companyName"/>",
+                name : "companyId",//最终选中的值字段名
+                type : "popup",
+                newline : false,
+                //如果不需要把lov选中的textField值放进data中那么这个属性可以不设置，如果需要放在data中就需要设置
+                textField:'companyName',
+                options:{
+                    readonly:false,//是否可编辑
+                    valueField : 'companyId',//选中的valueField
+                    textField : 'companyName',//选中的textField
+                    grid : {
+                        columns : [ {
+                            display : 'companyId',
+                            name : "companyId",
+                            width : 150,
+                            type : "int",
+                            align : "left"
+                        }, {
+                            display : 'companyName',
+                            name : "companyName",
+                            width : 150,
+                            type : "text",
+                            align : "left"
+                        }],
+                        //数据查询的url
+                        url : '${base.contextPath}/company/query' 
+                    },
+                    //lov上的查询条件
+                    condition : {
+                        inputWidth : 150,
+                        labelWidth : 70,
+                        fields : [ {
+                            display : 'companyNumber',
+                            name : "companyNumber",
+                            newline : true,
+                            type : "text"
+                        }, {
+                            display : 'companyName',
+                            name : "companyName",
+                            newline : false,
+                            type : "text"
+                        } ]
+                    }
+                }
+
+            },{
+                display : "<@spring.message "hbi.core.demo.customerName"/>",
+                name : "customerId",//最终选中的值字段名
+                type : "popup",
+                newline : true,
+                //如果不需要把lov选中的textField值放进data中那么这个属性可以不设置，如果需要放在data中就需要设置
+                textField:'customerName',
+                options:{
+                    readonly:false,//是否可编辑
+                    valueField : 'customerId',//选中的valueField
+                    textField : 'customerName',//选中的textField
+                    grid : {
+                        columns : [ {
+                            display : 'customerNumber',
+                            name : "customerNumber",
+                            width : 150,
+                            type : "int",
+                            align : "left"
+                        }, {
+                            display : 'customerName',
+                            name : "customerName",
+                            width : 150,
+                            type : "text",
+                            align : "left"
+                        }],
+                        //数据查询的url
+                        url : '${base.contextPath}/customer/query', 
+                        	onLoadData: function(){
+                                if($.ligerui.get('companyId').getValue()!=null){
+                                      this.setParm('companyId', $.ligerui.get('companyId').getValue())
+                              	}
+                            }
+                    },
+                    //lov上的查询条件
+                    condition : {
+                        inputWidth : 150,
+                        labelWidth : 70,
+                        fields : [ {
+                            display : 'customerId',
+                            name : "customerId",
+                            newline : true,
+                            type : "text"
+                        }, {
+                            display : 'customerName',
+                            name : "customerName",
+                            newline : false,
+                            type : "text"
+                        } ]
+                    }
+                }
+
+            },{ 
+            	  display: '订单日期',
+            	          name   : 'orderDate',
+            	          align  : 'center',
+            	          width  : 180,
+            	          type:'date',
+            	  		  newline : false,
+            	          format : "yyyy-MM-dd",
+            	          editor : {
+            	                type: 'date'
+            	          }
+            },{
+                type : 'text',
+                label: '<@spring.message "hbi.core.demo.price"/>',
+                name : 'price'
+               
+            },{
+            	display: "<@spring.message "hbi.core.demo.orderStatus"/>",
+            	name: "orderStatus",
+            	type: "select",
+            	textField:"orderStatus",
+            	newline:false,
+            	options: {
+               	 readonly: false,
+                	valueField: 'value',
+	                textField: 'meaning',
+	                data : typeStatue           
+            	}
+            }],
+            buttons: [{
+                text    : '保存',
+                disabled: false,
+                width   : 60,
+                click   : function () {
+           				
+                }
+            },{
+                text : '提交',
+                disabled : false,
+                width : 60,
+                click : function() {
+                	
+                }
+           },{
+               text : '审批',
+               disabled : false,
+               width : 60,
+               click : function() {
+               	
+               }
+          },{
+              text : '拒绝',
+              disabled : false,
+              width : 60,
+              click : function() {
+              	
+              }
+         },{
+             text : '整单删除',
+             disabled : false,
+             width : 60,
+             click : function() {
+             	
+             }
+        },{
+            text : '单据打印',
+            disabled : false,
+            width : 60,
+            click : function() {
+            	
+            }
+       },{
+           text : '返回',
+           disabled : false,
+           width : 60,
+           click : function() {
+        	   var dialog = frameElement.dialog;
+               dialog.close();
+           }
+      }]
+        });
+
+        window['demoGrid'] = $("#demoGrid").ligerGrid({
+            unSetValidateAttr: false,
+            columns          : [{
+                display : '行号',
+                name : 'lineNumber',
+                align : 'left',
+                width : 120,
+                editor : {
+                    type : 'text'
+                }, 
+                validate: {
+                    required: true
+                }
+            },{
+                display : '表头',
+                name : 'headerId',
+                width : 220,
+                //很重要，否则无法显示选中的描述
+                textField:'orderDate',
+                editor : {
+                    type : 'popup',
+                    valueField : 'headerId',//lov的valueField
+                    textField : 'headerId',//lov的textField
+                    grid : {
+                        columns : [ {
+                                        display : 'headerId',
+                                        name : "headerId",
+                                        width : 150,
+                                        type : "int",
+                                        align : "left"
+                                    }, {
+                                        display : 'orderNumber',
+                                        name : "orderNumber",
+                                        width : 150,
+                                        type : "int",
+                                        align : "left"
+                                    }, {
+                                        display : 'orderDate',
+                                        name : "orderDate",
+                                        width : 150,
+                                        type : "date",
+                                        align : "left"
+                                    }],
+                                    //数据查询的url
+                                    url : '${base.contextPath}/header/query' 
+                    },
+                     //lov上的查询条件
+                                condition : {
+                                    inputWidth : 150,
+                                    labelWidth : 70,
+                                    fields : [ {
+                                        display : 'headerId',
+                                        name : "headerId",
+                                        newline : true,
+                                        type : "int"
+                                    }, {
+                                        display : 'orderNumber',
+                                        name : "orderNumber",
+                                        newline : false,
+                                        type : "int"
+                                    }]
+                                }
+                }
+            },{
+                display : '<@spring.message "hbi.core.demo.itemCode"/>',
+                name : 'inventoryItemId',
+                width : 220,
+                //很重要，否则无法显示选中的描述
+                textField:'itemCode',
+                editor : {
+                    type : 'popup',
+                    valueField : 'inventoryItemId',//lov的valueField
+                    textField : 'itemDescription',
+                    textField : 'itemCode',//lov的textField
+                    grid : {
+                        columns : [ {
+                                        display : 'inventoryItemId',
+                                        name : "inventoryItemId",
+                                        width : 150,
+                                        type : "int",
+                                        align : "left"
+                                    }, {
+                                        display : 'itemDescription',
+                                        name : "itemDescription",
+                                        width : 150,
+                                        type : "text",
+                                        align : "left"
+                                    }, {
+                                        display : 'itemCode',
+                                        name : "itemCode",
+                                        width : 150,
+                                        type : "text",
+                                        align : "left"
+                                    }],
+                                    //数据查询的url
+                                    url : '${base.contextPath}/inventoryItem/query' 
+                    },
+                     //lov上的查询条件
+                                condition : {
+                                    inputWidth : 150,
+                                    labelWidth : 70,
+                                    fields : [ {
+                                        display : 'inventoryItemId',
+                                        name : "inventoryItemId",
+                                        newline : true,
+                                        type : "text"
+                                    }, {
+                                        display : 'itemDescription',
+                                        name : "itemDescription",
+                                        newline : false,
+                                        type : "text"
+                                    }, {
+                                        display : 'itemCode',
+                                        name : "itemCode",
+                                        newline : false,
+                                        type : "text"
+                                    } ]
+                                }
+                }
+            },{
+                display : '物料描述',
+                name : 'itemDescription',
+                align : 'left',
+                width : 120,
+            }, {
+                display : '产品单位',
+                name : 'orderQuantityUom',
+                align : 'left',
+                width : 150,
+                editor : {
+                    type : 'text'
+                }, 
+                validate: {
+                    required: true
+                }
+            },{
+                display : '数量',
+                name : 'orderdQuantity',
+                align : 'left',
+                width : 150,
+                editor : {
+                    type : 'text'
+                }, 
+                validate: {
+                    required: true
+                }
+            },{
+                display : '销售单价',
+                name : 'unitSellingPrice',
+                align : 'left',
+                width : 150,
+                editor : {
+                    type : 'text'
+                }, 
+                validate: {
+                    required: true
+                }
+            },{
+                display : '金额',
+                name : 'price',
+                align : 'left',
+                width : 150,
+                editor : {
+                    type : 'text'
+                }
+            },{
+                display : '备注',
+                name : 'description',
+                align : 'left',
+                width : 150,
+                editor : {
+                    type : 'text'
+                }, 
+                validate: {
+                    required: true
+                }
+            }],
+            url : '${base.contextPath}/line2/query',
+            toolbar : {
+                items : [ {
+                    text : '<@spring.message "hap.new"/>',
+                    disable : false,
+                    click : function() {
+                    	demoGrid.addRow({})
+                    },
+                    icon : 'add'
+                }, {
+                    line : true
+                }, {
+                    text : '<@spring.message "hap.delete"/>',
+                    click : function() {
+                         Hap.gridDelete({
+                            grid : fruitGrid,
+                            url : '${base.contextPath}/sys/student/delete'
+                        }) 
+                    	demoGrid.deleteSelectedRow();
+                    },
+                    icon : 'delete'
+                }, {
+                    line : true
+                }, {
+                    text : '<@spring.message "hap.save"/>',
+                    click : function() {
+                        Hap.gridSave({
+                            grid : demoGrid,
+                            url : '${base.contextPath}/line/submit'
+                        })
+                    },
+                    icon : 'save'
+                }]
+            },
+            enabledEdit : true,
+            width : '99%',
+            height : '98%',
+            checkbox : true
+        });
+        
+        
+        window['demoGrid2'] = $("#demoGrid2").ligerGrid({
+            unSetValidateAttr: false,
+            columns          : [{
+                display : '行号',
+                name : "lineNumber",
+                width : 80,
+                type : "int",
+                align : "left"
+            },{
+                display : '附件信息1',
+                name : "addition1",
+                width : 80,
+                type : "int",
+                align : "left",
+                editor : {
+                    type : 'text'
+                }
+            },{
+                display : '附件信息2',
+                name : "addition2",
+                width : 80,
+                type : "int",
+                align : "left",
+                editor : {
+                    type : 'text'
+                }
+            },{
+                display : '附件信息3',
+                name : "addition3",
+                width : 80,
+                type : "int",
+                align : "left",
+                editor : {
+                    type : 'text'
+                }
+            },{
+                display : '附件信息4',
+                name : "addition4",
+                width : 80,
+                type : "int",
+                align : "left",
+                editor : {
+                    type : 'text'
+                }
+            },{
+                display : '附件信息5',
+                name : "addition5",
+                width : 80,
+                type : "int",
+                align : "left",
+                editor : {
+                    type : 'text'
+                }
+            }],
+            url              : '${base.contextPath}/line2/query',
+            toolbar : {
+                items : [ {
+                    text : '<@spring.message "hap.new"/>',
+                    disable : false,
+                    click : function() {
+                        demoGrid.addRow({})
+                    },
+                    icon : 'add'
+                }, {
+                    line : true
+                }, {
+                    text : '<@spring.message "hap.delete"/>',
+                    click : function() {
+                         Hap.gridDelete({
+                            grid : fruitGrid,
+                            url : '${base.contextPath}/sys/student/delete'
+                        }) 
+                    	demoGrid.deleteSelectedRow();
+                    },
+                    icon : 'delete'
+                }, {
+                    line : true
+                }, {
+                    text : '<@spring.message "hap.save"/>',
+                    click : function() {
+                        Hap.gridSave({
+                            grid : demoGrid,
+                            url : '${base.contextPath}/line/submit'
+                        })
+                    },
+                    icon : 'save'
+                }]
+            },
+            enabledEdit : true,
+            width : '99%',
+            height : '98%',
+            checkbox : true
+        });
+    });
+</script>
+</body>
+</html>

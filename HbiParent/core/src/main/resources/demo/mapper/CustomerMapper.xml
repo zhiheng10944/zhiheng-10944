@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hbi.core.demo.mapper.CustomerMapper">
+  <resultMap id="BaseResultMap" type="hbi.core.demo.dto.Customer" extends="com.hand.hap.mapper.StdMapper.STD">
+    <result column="CUSTOMER_ID" property="customerId" jdbcType="BIGINT"/>
+    <result column="CUSTOMER_NUMBER" jdbcType="VARCHAR" property="customerNumber" />
+    <result column="CUSTOMER_NAME" jdbcType="VARCHAR" property="customerName" />
+    <result column="COMPANY_ID" jdbcType="BIGINT" property="companyId" />
+    <result column="ENABLED_FLAG" jdbcType="VARCHAR" property="enabledFlag" />
+    <result column="CREATION_DATE" jdbcType="TIMESTAMP" property="creationDate" />
+    <result column="CREATED_BY" jdbcType="BIGINT" property="createdBy" />
+    <result column="LAST_UPDATED_BY" jdbcType="BIGINT" property="lastUpdatedBy" />
+    <result column="LAST_UPDATE_DATE" jdbcType="TIMESTAMP" property="lastUpdateDate" />
+    <result column="LAST_UPDATE_LOGIN" jdbcType="BIGINT" property="lastUpdateLogin" />
+  </resultMap>
+  
+  
+  
+</mapper>
